@@ -1,0 +1,68 @@
+
+bool SymbolManager::ReadTargetFunctionList(const char* filename)
+{
+
+	std::ifstream ifs(filename);
+    Json::Reader reader;
+
+	/* Json value : storing & representing the pair-value */
+	Json::Value obj;
+
+	/* Read file from ifs, store to obj(Value) */
+    reader.parse(ifs, obj); // reader can also read strings
+
+	/* String Output */
+    const Json::Value& TargetFunctionList = obj["TargetFunctionList"]; // array of OperatingSystem
+    
+	for (auto iter1 = TargetFunctionList.begin(); 
+			iter1 != OperatingSystem.end(); iter1++)
+	{
+
+		const Json::Value& OSType = *iter1;
+
+		if(OSType["Purpose"].asString() == "MemoryAllocationC")
+		{
+			std::cout << "Purpose: " << OSType["Purpose"].asString() << std::endl;
+
+			const Json::Value& OSTI = OSType["FunctionNameList"];
+			for(unsigned int i = 0; i < OSTI.size(); i++)
+			{
+				std::cout << "Alloc: " << OSTI[i]["Alloc"].asString() << std::endl;
+				std::cout << "Dealloc: " << OSTI[i]["Dealloc"].asString() << std::endl;
+			}
+			std::cout << std::endl;
+
+		}
+
+		else if(OSType["Purpose"].asString() == "FileAccess")
+		{
+			std::cout << "Purpose: " << OSType["Purpose"].asString() << std::endl;
+
+			const Json::Value& OSTI = OSType["FunctionNameList"];
+			for(unsigned int i = 0; i < OSTI.size(); i++)
+			{
+				std::cout << "open: " << OSTI[i]["open"].asString() << std::endl;
+				std::cout << "close: " << OSTI[i]["close"].asString() << std::endl;
+			}
+			std::cout << std::endl;
+		}
+
+		else if(OSType["Purpose"].asString() == "llvmDebugCore")
+		{
+			std::cout << "Purpose: " << OSType["Purpose"].asString() << std::endl;
+
+			const Json::Value& OSTI = OSType["FunctionNameList"];
+			for(unsigned int i = 0; i < OSTI.size(); i++)
+			{
+				std::cout << "Name: " << OSTI[i]["Name"].asString() << std::endl;
+			}
+			std::cout << std::endl;
+
+		}
+
+	}
+
+	return true;
+}
+
+

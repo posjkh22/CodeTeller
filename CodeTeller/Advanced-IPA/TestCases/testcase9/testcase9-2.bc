@@ -1,0 +1,242 @@
+; ModuleID = 'testcase9-2.c'
+source_filename = "testcase9-2.c"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
+
+%union.pthread_mutex_t = type { %struct.__pthread_mutex_s }
+%struct.__pthread_mutex_s = type { i32, i32, i32, i32, i32, i16, i16, %struct.__pthread_internal_list }
+%struct.__pthread_internal_list = type { %struct.__pthread_internal_list*, %struct.__pthread_internal_list* }
+%union.pthread_mutexattr_t = type { i32 }
+%union.pthread_attr_t = type { i64, [48 x i8] }
+
+@SharedResource1 = global i32 1, align 4, !dbg !0
+@SharedResource2 = global i32 1, align 4, !dbg !9
+@SharedResource3 = global i32 1, align 4, !dbg !12
+@SharedResource4 = global i32 1, align 4, !dbg !14
+@SharedResource5 = global i32 1, align 4, !dbg !16
+@mutex_lock1 = common global %union.pthread_mutex_t zeroinitializer, align 8, !dbg !18
+@mutex_lock2 = common global %union.pthread_mutex_t zeroinitializer, align 8, !dbg !50
+
+; Function Attrs: noinline nounwind optnone uwtable
+define void @task1() #0 !dbg !56 {
+  %1 = call i32 @pthread_mutex_lock(%union.pthread_mutex_t* @mutex_lock1) #4, !dbg !59
+  %2 = call i32 @pthread_mutex_lock(%union.pthread_mutex_t* @mutex_lock1) #4, !dbg !60
+  %3 = load i32, i32* @SharedResource1, align 4, !dbg !61
+  %4 = add nsw i32 %3, 1, !dbg !61
+  store i32 %4, i32* @SharedResource1, align 4, !dbg !61
+  %5 = load i32, i32* @SharedResource2, align 4, !dbg !62
+  %6 = add nsw i32 %5, 1, !dbg !62
+  store i32 %6, i32* @SharedResource2, align 4, !dbg !62
+  %7 = call i32 @pthread_mutex_unlock(%union.pthread_mutex_t* @mutex_lock1) #4, !dbg !63
+  %8 = call i32 @pthread_mutex_lock(%union.pthread_mutex_t* @mutex_lock2) #4, !dbg !64
+  %9 = load i32, i32* @SharedResource2, align 4, !dbg !65
+  %10 = add nsw i32 %9, 1, !dbg !65
+  store i32 %10, i32* @SharedResource2, align 4, !dbg !65
+  %11 = load i32, i32* @SharedResource5, align 4, !dbg !66
+  %12 = add nsw i32 %11, 1, !dbg !66
+  store i32 %12, i32* @SharedResource5, align 4, !dbg !66
+  %13 = call i32 @pthread_mutex_unlock(%union.pthread_mutex_t* @mutex_lock2) #4, !dbg !67
+  %14 = call i32 @pthread_mutex_unlock(%union.pthread_mutex_t* @mutex_lock2) #4, !dbg !68
+  %15 = load i32, i32* @SharedResource3, align 4, !dbg !69
+  %16 = add nsw i32 %15, 1, !dbg !69
+  store i32 %16, i32* @SharedResource3, align 4, !dbg !69
+  %17 = load i32, i32* @SharedResource4, align 4, !dbg !70
+  %18 = add nsw i32 %17, 1, !dbg !70
+  store i32 %18, i32* @SharedResource4, align 4, !dbg !70
+  ret void, !dbg !71
+}
+
+; Function Attrs: nounwind
+declare i32 @pthread_mutex_lock(%union.pthread_mutex_t*) #1
+
+; Function Attrs: nounwind
+declare i32 @pthread_mutex_unlock(%union.pthread_mutex_t*) #1
+
+; Function Attrs: noinline nounwind optnone uwtable
+define void @task2() #0 !dbg !72 {
+  %1 = load i32, i32* @SharedResource2, align 4, !dbg !73
+  %2 = add nsw i32 %1, 1, !dbg !73
+  store i32 %2, i32* @SharedResource2, align 4, !dbg !73
+  %3 = call i32 @pthread_mutex_unlock(%union.pthread_mutex_t* @mutex_lock2) #4, !dbg !74
+  %4 = call i32 @pthread_mutex_lock(%union.pthread_mutex_t* @mutex_lock1) #4, !dbg !75
+  %5 = load i32, i32* @SharedResource1, align 4, !dbg !76
+  %6 = add nsw i32 %5, 1, !dbg !76
+  store i32 %6, i32* @SharedResource1, align 4, !dbg !76
+  %7 = load i32, i32* @SharedResource1, align 4, !dbg !77
+  %8 = add nsw i32 %7, 1, !dbg !77
+  store i32 %8, i32* @SharedResource1, align 4, !dbg !77
+  %9 = load i32, i32* @SharedResource3, align 4, !dbg !78
+  %10 = add nsw i32 %9, 1, !dbg !78
+  store i32 %10, i32* @SharedResource3, align 4, !dbg !78
+  %11 = call i32 @pthread_mutex_unlock(%union.pthread_mutex_t* @mutex_lock1) #4, !dbg !79
+  %12 = load i32, i32* @SharedResource4, align 4, !dbg !80
+  %13 = add nsw i32 %12, 1, !dbg !80
+  store i32 %13, i32* @SharedResource4, align 4, !dbg !80
+  %14 = load i32, i32* @SharedResource5, align 4, !dbg !81
+  %15 = add nsw i32 %14, 1, !dbg !81
+  store i32 %15, i32* @SharedResource5, align 4, !dbg !81
+  ret void, !dbg !82
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define i32 @main() #0 !dbg !83 {
+  %1 = alloca i32, align 4
+  %2 = alloca i32*, align 8
+  %3 = alloca i64, align 8
+  %4 = alloca i64, align 8
+  %5 = alloca i32, align 4
+  store i32 0, i32* %1, align 4
+  call void @llvm.dbg.declare(metadata i32** %2, metadata !86, metadata !88), !dbg !89
+  %6 = call noalias i8* @malloc(i64 4) #4, !dbg !90
+  %7 = bitcast i8* %6 to i32*, !dbg !90
+  store i32* %7, i32** %2, align 8, !dbg !89
+  call void @llvm.dbg.declare(metadata i64* %3, metadata !91, metadata !88), !dbg !94
+  call void @llvm.dbg.declare(metadata i64* %4, metadata !95, metadata !88), !dbg !96
+  call void @llvm.dbg.declare(metadata i32* %5, metadata !97, metadata !88), !dbg !98
+  %8 = call i32 @pthread_mutex_init(%union.pthread_mutex_t* @mutex_lock1, %union.pthread_mutexattr_t* null) #4, !dbg !99
+  %9 = call i32 @pthread_mutex_init(%union.pthread_mutex_t* @mutex_lock2, %union.pthread_mutexattr_t* null) #4, !dbg !100
+  %10 = call i32 @pthread_create(i64* %3, %union.pthread_attr_t* null, i8* (i8*)* bitcast (void ()* @task1 to i8* (i8*)*), i8* null) #4, !dbg !101
+  %11 = call i32 @pthread_create(i64* %4, %union.pthread_attr_t* null, i8* (i8*)* bitcast (void ()* @task2 to i8* (i8*)*), i8* null) #4, !dbg !102
+  %12 = ptrtoint i64* %3 to i64, !dbg !103
+  %13 = bitcast i32* %5 to i8**, !dbg !104
+  %14 = call i32 @pthread_join(i64 %12, i8** %13), !dbg !105
+  %15 = ptrtoint i64* %4 to i64, !dbg !106
+  %16 = bitcast i32* %5 to i8**, !dbg !107
+  %17 = call i32 @pthread_join(i64 %15, i8** %16), !dbg !108
+  ret i32 0, !dbg !109
+}
+
+; Function Attrs: nounwind readnone speculatable
+declare void @llvm.dbg.declare(metadata, metadata, metadata) #2
+
+; Function Attrs: nounwind
+declare noalias i8* @malloc(i64) #1
+
+; Function Attrs: nounwind
+declare i32 @pthread_mutex_init(%union.pthread_mutex_t*, %union.pthread_mutexattr_t*) #1
+
+; Function Attrs: nounwind
+declare i32 @pthread_create(i64*, %union.pthread_attr_t*, i8* (i8*)*, i8*) #1
+
+declare i32 @pthread_join(i64, i8**) #3
+
+attributes #0 = { noinline nounwind optnone uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind readnone speculatable }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind }
+
+!llvm.dbg.cu = !{!2}
+!llvm.module.flags = !{!52, !53, !54}
+!llvm.ident = !{!55}
+
+!0 = !DIGlobalVariableExpression(var: !1)
+!1 = distinct !DIGlobalVariable(name: "SharedResource1", scope: !2, file: !3, line: 8, type: !11, isLocal: false, isDefinition: true)
+!2 = distinct !DICompileUnit(language: DW_LANG_C99, file: !3, producer: "clang version 5.0.0 (tags/RELEASE_500/final)", isOptimized: false, runtimeVersion: 0, emissionKind: FullDebug, enums: !4, retainedTypes: !5, globals: !8)
+!3 = !DIFile(filename: "testcase9-2.c", directory: "/home/posjkh/ResearchSubjects/QtPlatformAnalysis/QtPlatformStaticAnalysis/02_Calender/Advanced-IPA/TestCases/testcase9")
+!4 = !{}
+!5 = !{!6, !7}
+!6 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: null, size: 64)
+!7 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !6, size: 64)
+!8 = !{!0, !9, !12, !14, !16, !18, !50}
+!9 = !DIGlobalVariableExpression(var: !10)
+!10 = distinct !DIGlobalVariable(name: "SharedResource2", scope: !2, file: !3, line: 9, type: !11, isLocal: false, isDefinition: true)
+!11 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
+!12 = !DIGlobalVariableExpression(var: !13)
+!13 = distinct !DIGlobalVariable(name: "SharedResource3", scope: !2, file: !3, line: 10, type: !11, isLocal: false, isDefinition: true)
+!14 = !DIGlobalVariableExpression(var: !15)
+!15 = distinct !DIGlobalVariable(name: "SharedResource4", scope: !2, file: !3, line: 11, type: !11, isLocal: false, isDefinition: true)
+!16 = !DIGlobalVariableExpression(var: !17)
+!17 = distinct !DIGlobalVariable(name: "SharedResource5", scope: !2, file: !3, line: 12, type: !11, isLocal: false, isDefinition: true)
+!18 = !DIGlobalVariableExpression(var: !19)
+!19 = distinct !DIGlobalVariable(name: "mutex_lock1", scope: !2, file: !3, line: 5, type: !20, isLocal: false, isDefinition: true)
+!20 = !DIDerivedType(tag: DW_TAG_typedef, name: "pthread_mutex_t", file: !21, line: 128, baseType: !22)
+!21 = !DIFile(filename: "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h", directory: "/home/posjkh/ResearchSubjects/QtPlatformAnalysis/QtPlatformStaticAnalysis/02_Calender/Advanced-IPA/TestCases/testcase9")
+!22 = distinct !DICompositeType(tag: DW_TAG_union_type, file: !21, line: 90, size: 320, elements: !23)
+!23 = !{!24, !43, !48}
+!24 = !DIDerivedType(tag: DW_TAG_member, name: "__data", scope: !22, file: !21, line: 125, baseType: !25, size: 320)
+!25 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "__pthread_mutex_s", file: !21, line: 92, size: 320, elements: !26)
+!26 = !{!27, !28, !30, !31, !32, !33, !35, !36}
+!27 = !DIDerivedType(tag: DW_TAG_member, name: "__lock", scope: !25, file: !21, line: 94, baseType: !11, size: 32)
+!28 = !DIDerivedType(tag: DW_TAG_member, name: "__count", scope: !25, file: !21, line: 95, baseType: !29, size: 32, offset: 32)
+!29 = !DIBasicType(name: "unsigned int", size: 32, encoding: DW_ATE_unsigned)
+!30 = !DIDerivedType(tag: DW_TAG_member, name: "__owner", scope: !25, file: !21, line: 96, baseType: !11, size: 32, offset: 64)
+!31 = !DIDerivedType(tag: DW_TAG_member, name: "__nusers", scope: !25, file: !21, line: 98, baseType: !29, size: 32, offset: 96)
+!32 = !DIDerivedType(tag: DW_TAG_member, name: "__kind", scope: !25, file: !21, line: 102, baseType: !11, size: 32, offset: 128)
+!33 = !DIDerivedType(tag: DW_TAG_member, name: "__spins", scope: !25, file: !21, line: 104, baseType: !34, size: 16, offset: 160)
+!34 = !DIBasicType(name: "short", size: 16, encoding: DW_ATE_signed)
+!35 = !DIDerivedType(tag: DW_TAG_member, name: "__elision", scope: !25, file: !21, line: 105, baseType: !34, size: 16, offset: 176)
+!36 = !DIDerivedType(tag: DW_TAG_member, name: "__list", scope: !25, file: !21, line: 106, baseType: !37, size: 128, offset: 192)
+!37 = !DIDerivedType(tag: DW_TAG_typedef, name: "__pthread_list_t", file: !21, line: 79, baseType: !38)
+!38 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "__pthread_internal_list", file: !21, line: 75, size: 128, elements: !39)
+!39 = !{!40, !42}
+!40 = !DIDerivedType(tag: DW_TAG_member, name: "__prev", scope: !38, file: !21, line: 77, baseType: !41, size: 64)
+!41 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !38, size: 64)
+!42 = !DIDerivedType(tag: DW_TAG_member, name: "__next", scope: !38, file: !21, line: 78, baseType: !41, size: 64, offset: 64)
+!43 = !DIDerivedType(tag: DW_TAG_member, name: "__size", scope: !22, file: !21, line: 126, baseType: !44, size: 320)
+!44 = !DICompositeType(tag: DW_TAG_array_type, baseType: !45, size: 320, elements: !46)
+!45 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
+!46 = !{!47}
+!47 = !DISubrange(count: 40)
+!48 = !DIDerivedType(tag: DW_TAG_member, name: "__align", scope: !22, file: !21, line: 127, baseType: !49, size: 64)
+!49 = !DIBasicType(name: "long int", size: 64, encoding: DW_ATE_signed)
+!50 = !DIGlobalVariableExpression(var: !51)
+!51 = distinct !DIGlobalVariable(name: "mutex_lock2", scope: !2, file: !3, line: 6, type: !20, isLocal: false, isDefinition: true)
+!52 = !{i32 2, !"Dwarf Version", i32 4}
+!53 = !{i32 2, !"Debug Info Version", i32 3}
+!54 = !{i32 1, !"wchar_size", i32 4}
+!55 = !{!"clang version 5.0.0 (tags/RELEASE_500/final)"}
+!56 = distinct !DISubprogram(name: "task1", scope: !3, file: !3, line: 15, type: !57, isLocal: false, isDefinition: true, scopeLine: 16, isOptimized: false, unit: !2, variables: !4)
+!57 = !DISubroutineType(types: !58)
+!58 = !{null}
+!59 = !DILocation(line: 18, column: 2, scope: !56)
+!60 = !DILocation(line: 19, column: 2, scope: !56)
+!61 = !DILocation(line: 21, column: 17, scope: !56)
+!62 = !DILocation(line: 22, column: 17, scope: !56)
+!63 = !DILocation(line: 24, column: 2, scope: !56)
+!64 = !DILocation(line: 27, column: 2, scope: !56)
+!65 = !DILocation(line: 29, column: 17, scope: !56)
+!66 = !DILocation(line: 30, column: 17, scope: !56)
+!67 = !DILocation(line: 32, column: 2, scope: !56)
+!68 = !DILocation(line: 33, column: 2, scope: !56)
+!69 = !DILocation(line: 36, column: 17, scope: !56)
+!70 = !DILocation(line: 37, column: 17, scope: !56)
+!71 = !DILocation(line: 39, column: 1, scope: !56)
+!72 = distinct !DISubprogram(name: "task2", scope: !3, file: !3, line: 42, type: !57, isLocal: false, isDefinition: true, scopeLine: 43, isOptimized: false, unit: !2, variables: !4)
+!73 = !DILocation(line: 46, column: 17, scope: !72)
+!74 = !DILocation(line: 48, column: 2, scope: !72)
+!75 = !DILocation(line: 50, column: 2, scope: !72)
+!76 = !DILocation(line: 52, column: 17, scope: !72)
+!77 = !DILocation(line: 54, column: 17, scope: !72)
+!78 = !DILocation(line: 55, column: 17, scope: !72)
+!79 = !DILocation(line: 56, column: 2, scope: !72)
+!80 = !DILocation(line: 57, column: 17, scope: !72)
+!81 = !DILocation(line: 58, column: 17, scope: !72)
+!82 = !DILocation(line: 60, column: 1, scope: !72)
+!83 = distinct !DISubprogram(name: "main", scope: !3, file: !3, line: 64, type: !84, isLocal: false, isDefinition: true, scopeLine: 65, isOptimized: false, unit: !2, variables: !4)
+!84 = !DISubroutineType(types: !85)
+!85 = !{!11}
+!86 = !DILocalVariable(name: "ptr", scope: !83, file: !3, line: 67, type: !87)
+!87 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !11, size: 64)
+!88 = !DIExpression()
+!89 = !DILocation(line: 67, column: 7, scope: !83)
+!90 = !DILocation(line: 67, column: 13, scope: !83)
+!91 = !DILocalVariable(name: "p_thread1", scope: !83, file: !3, line: 69, type: !92)
+!92 = !DIDerivedType(tag: DW_TAG_typedef, name: "pthread_t", file: !21, line: 60, baseType: !93)
+!93 = !DIBasicType(name: "long unsigned int", size: 64, encoding: DW_ATE_unsigned)
+!94 = !DILocation(line: 69, column: 12, scope: !83)
+!95 = !DILocalVariable(name: "p_thread2", scope: !83, file: !3, line: 70, type: !92)
+!96 = !DILocation(line: 70, column: 12, scope: !83)
+!97 = !DILocalVariable(name: "state", scope: !83, file: !3, line: 72, type: !11)
+!98 = !DILocation(line: 72, column: 6, scope: !83)
+!99 = !DILocation(line: 74, column: 2, scope: !83)
+!100 = !DILocation(line: 75, column: 2, scope: !83)
+!101 = !DILocation(line: 77, column: 2, scope: !83)
+!102 = !DILocation(line: 78, column: 2, scope: !83)
+!103 = !DILocation(line: 80, column: 15, scope: !83)
+!104 = !DILocation(line: 80, column: 27, scope: !83)
+!105 = !DILocation(line: 80, column: 2, scope: !83)
+!106 = !DILocation(line: 81, column: 15, scope: !83)
+!107 = !DILocation(line: 81, column: 27, scope: !83)
+!108 = !DILocation(line: 81, column: 2, scope: !83)
+!109 = !DILocation(line: 84, column: 2, scope: !83)

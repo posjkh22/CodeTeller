@@ -1,0 +1,20 @@
+t1_fnc1:
+t1_fnc1.var_t1_func1
+free:
+No Static Variables
+t2_fnc1:
+t2_fnc1.var_t2_func1
+shared_func2:
+No Static Variables
+task1:
+No Static Variables
+malloc:
+No Static Variables
+task2:
+No Static Variables
+main:
+No Static Variables
+pthread_create:
+No Static Variables
+pthread_join:
+No Static Variables

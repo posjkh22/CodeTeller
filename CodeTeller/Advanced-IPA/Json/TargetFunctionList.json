@@ -1,0 +1,39 @@
+{
+	"TargetFunctionList": 
+	[
+		{	
+			"Purpose":"MemoryAllocationC",
+			"FunctionNameList":
+			[
+				{
+					"Alloc": "malloc",
+					"Dealloc": "free"
+				}
+			]
+		},
+		
+		{	
+			"Purpose":"FileAccess",
+			"FunctionNameList":
+			[
+				{
+					"open": "open",
+					"close": "close"
+				},
+		
+				{
+					"open": "fopen",
+					"close": "fclose"
+				}
+			]
+		},
+
+		{	
+			"Purpose":"llvmDebugCore",
+			"FunctionNameList":
+			[
+				{"Name": "llvm.dbg.declare"}
+			]
+		}
+	]
+}

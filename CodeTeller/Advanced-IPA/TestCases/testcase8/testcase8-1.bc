@@ -1,0 +1,412 @@
+; ModuleID = 'testcase8-1.c'
+source_filename = "testcase8-1.c"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
+
+%union.pthread_attr_t = type { i64, [48 x i8] }
+
+@IntegerGlobalVariable = global i32 3, align 4, !dbg !0
+@DoubleGlobalVariable = global double 3.500000e+00, align 8, !dbg !10
+@t1_fnc1.var_t1_func1 = internal global i32 2, align 4, !dbg !13
+@t2_fnc1.var_t2_func1 = internal global i32 2, align 4, !dbg !18
+@charGlobal1 = common global i8 0, align 1, !dbg !23
+@IntegerPointerGV = common global i32* null, align 8, !dbg !26
+@charGlobal2 = common global i8 0, align 1, !dbg !28
+
+; Function Attrs: noinline nounwind optnone uwtable
+define void @t1_fnc1(i32*) #0 !dbg !15 {
+  %2 = alloca i32*, align 8
+  store i32* %0, i32** %2, align 8
+  call void @llvm.dbg.declare(metadata i32** %2, metadata !34, metadata !35), !dbg !36
+  %3 = load i32*, i32** %2, align 8, !dbg !37
+  %4 = bitcast i32* %3 to i8*, !dbg !37
+  call void @free(i8* %4) #4, !dbg !38
+  store i32 3, i32* @t1_fnc1.var_t1_func1, align 4, !dbg !39
+  ret void, !dbg !40
+}
+
+; Function Attrs: nounwind readnone speculatable
+declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
+
+; Function Attrs: nounwind
+declare void @free(i8*) #2
+
+; Function Attrs: noinline nounwind optnone uwtable
+define void @t2_fnc1(i32*, i32*) #0 !dbg !20 {
+  %3 = alloca i32*, align 8
+  %4 = alloca i32*, align 8
+  store i32* %0, i32** %3, align 8
+  call void @llvm.dbg.declare(metadata i32** %3, metadata !41, metadata !35), !dbg !42
+  store i32* %1, i32** %4, align 8
+  call void @llvm.dbg.declare(metadata i32** %4, metadata !43, metadata !35), !dbg !44
+  %5 = load i32*, i32** %3, align 8, !dbg !45
+  %6 = bitcast i32* %5 to i8*, !dbg !45
+  call void @free(i8* %6) #4, !dbg !46
+  %7 = load i32*, i32** %4, align 8, !dbg !47
+  %8 = bitcast i32* %7 to i8*, !dbg !47
+  call void @free(i8* %8) #4, !dbg !48
+  store i32 3, i32* @t2_fnc1.var_t2_func1, align 4, !dbg !49
+  ret void, !dbg !50
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define i32* @shared_func2(i32*, i32*) #0 !dbg !51 {
+  %3 = alloca i32*, align 8
+  %4 = alloca i32*, align 8
+  store i32* %0, i32** %3, align 8
+  call void @llvm.dbg.declare(metadata i32** %3, metadata !54, metadata !35), !dbg !55
+  store i32* %1, i32** %4, align 8
+  call void @llvm.dbg.declare(metadata i32** %4, metadata !56, metadata !35), !dbg !57
+  store double 3.700000e+00, double* @DoubleGlobalVariable, align 8, !dbg !58
+  %5 = load i32*, i32** %3, align 8, !dbg !59
+  ret i32* %5, !dbg !60
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define i32 @shared_func1() #0 !dbg !61 {
+  %1 = alloca i32, align 4
+  %2 = alloca i32, align 4
+  call void @llvm.dbg.declare(metadata i32* %2, metadata !64, metadata !35), !dbg !65
+  store i32 1, i32* %2, align 4, !dbg !65
+  %3 = load i32, i32* %1, align 4, !dbg !66
+  ret i32 %3, !dbg !66
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define void @task1(i8*) #0 !dbg !67 {
+  %2 = alloca i8*, align 8
+  %3 = alloca i32*, align 8
+  %4 = alloca i32*, align 8
+  %5 = alloca i32*, align 8
+  %6 = alloca i32, align 4
+  store i8* %0, i8** %2, align 8
+  call void @llvm.dbg.declare(metadata i8** %2, metadata !70, metadata !35), !dbg !71
+  call void @llvm.dbg.declare(metadata i32** %3, metadata !72, metadata !35), !dbg !73
+  %7 = call noalias i8* @malloc(i64 4) #4, !dbg !74
+  %8 = bitcast i8* %7 to i32*, !dbg !75
+  store i32* %8, i32** %3, align 8, !dbg !73
+  call void @llvm.dbg.declare(metadata i32** %4, metadata !76, metadata !35), !dbg !77
+  %9 = call noalias i8* @malloc(i64 4) #4, !dbg !78
+  %10 = bitcast i8* %9 to i32*, !dbg !79
+  store i32* %10, i32** %4, align 8, !dbg !77
+  call void @llvm.dbg.declare(metadata i32** %5, metadata !80, metadata !35), !dbg !81
+  %11 = call i32 @shared_func1(), !dbg !82
+  store i32 1, i32* @IntegerGlobalVariable, align 4, !dbg !83
+  call void @llvm.dbg.declare(metadata i32* %6, metadata !84, metadata !35), !dbg !85
+  store i32 0, i32* %6, align 4, !dbg !85
+  %12 = load i32, i32* %6, align 4, !dbg !86
+  %13 = icmp eq i32 %12, 0, !dbg !88
+  br i1 %13, label %14, label %16, !dbg !89
+
+; <label>:14:                                     ; preds = %1
+  %15 = load i32*, i32** %3, align 8, !dbg !90
+  call void @t1_fnc1(i32* %15), !dbg !92
+  br label %24, !dbg !93
+
+; <label>:16:                                     ; preds = %1
+  %17 = load i32*, i32** %3, align 8, !dbg !94
+  %18 = load i32*, i32** %4, align 8, !dbg !96
+  %19 = call i32* @shared_func2(i32* %17, i32* %18), !dbg !97
+  store i32* %19, i32** %5, align 8, !dbg !98
+  %20 = load i32*, i32** %5, align 8, !dbg !99
+  %21 = bitcast i32* %20 to i8*, !dbg !99
+  call void @free(i8* %21) #4, !dbg !100
+  %22 = load i32*, i32** %4, align 8, !dbg !101
+  %23 = bitcast i32* %22 to i8*, !dbg !101
+  call void @free(i8* %23) #4, !dbg !102
+  br label %24
+
+; <label>:24:                                     ; preds = %16, %14
+  ret void, !dbg !103
+}
+
+; Function Attrs: nounwind
+declare noalias i8* @malloc(i64) #2
+
+; Function Attrs: noinline nounwind optnone uwtable
+define void @task2(i8*) #0 !dbg !104 {
+  %2 = alloca i8*, align 8
+  %3 = alloca i32*, align 8
+  %4 = alloca i32*, align 8
+  %5 = alloca i32*, align 8
+  %6 = alloca i32, align 4
+  store i8* %0, i8** %2, align 8
+  call void @llvm.dbg.declare(metadata i8** %2, metadata !105, metadata !35), !dbg !106
+  call void @llvm.dbg.declare(metadata i32** %3, metadata !107, metadata !35), !dbg !108
+  %7 = call noalias i8* @malloc(i64 4) #4, !dbg !109
+  %8 = bitcast i8* %7 to i32*, !dbg !110
+  store i32* %8, i32** %3, align 8, !dbg !108
+  call void @llvm.dbg.declare(metadata i32** %4, metadata !111, metadata !35), !dbg !112
+  %9 = call noalias i8* @malloc(i64 4) #4, !dbg !113
+  %10 = bitcast i8* %9 to i32*, !dbg !114
+  store i32* %10, i32** %4, align 8, !dbg !112
+  call void @llvm.dbg.declare(metadata i32** %5, metadata !115, metadata !35), !dbg !116
+  %11 = call i32 @shared_func1(), !dbg !117
+  call void @llvm.dbg.declare(metadata i32* %6, metadata !118, metadata !35), !dbg !119
+  store i32 0, i32* %6, align 4, !dbg !119
+  %12 = load i32, i32* %6, align 4, !dbg !120
+  %13 = icmp eq i32 %12, 0, !dbg !122
+  br i1 %13, label %14, label %23, !dbg !123
+
+; <label>:14:                                     ; preds = %1
+  %15 = load i32*, i32** %4, align 8, !dbg !124
+  store i32* %15, i32** %5, align 8, !dbg !126
+  %16 = load i32*, i32** %5, align 8, !dbg !127
+  %17 = bitcast i32* %16 to i8*, !dbg !127
+  call void @free(i8* %17) #4, !dbg !128
+  %18 = load i32*, i32** %3, align 8, !dbg !129
+  %19 = load i32*, i32** %4, align 8, !dbg !130
+  %20 = call i32* @shared_func2(i32* %18, i32* %19), !dbg !131
+  store i32* %20, i32** %5, align 8, !dbg !132
+  %21 = load i32*, i32** %3, align 8, !dbg !133
+  %22 = load i32*, i32** %4, align 8, !dbg !134
+  call void @t2_fnc1(i32* %21, i32* %22), !dbg !135
+  br label %30, !dbg !136
+
+; <label>:23:                                     ; preds = %1
+  %24 = load i32*, i32** %3, align 8, !dbg !137
+  %25 = bitcast i32* %24 to i8*, !dbg !137
+  call void @free(i8* %25) #4, !dbg !139
+  %26 = load i32*, i32** %4, align 8, !dbg !140
+  %27 = bitcast i32* %26 to i8*, !dbg !140
+  call void @free(i8* %27) #4, !dbg !141
+  %28 = load i32*, i32** %4, align 8, !dbg !142
+  %29 = bitcast i32* %28 to i8*, !dbg !142
+  call void @free(i8* %29) #4, !dbg !143
+  br label %30
+
+; <label>:30:                                     ; preds = %23, %14
+  ret void, !dbg !144
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define i32 @main() #0 !dbg !145 {
+  %1 = alloca i32, align 4
+  %2 = alloca i32, align 4
+  %3 = alloca i32, align 4
+  %4 = alloca i32, align 4
+  %5 = alloca i32, align 4
+  %6 = alloca i32, align 4
+  %7 = alloca [2 x i64], align 16
+  store i32 0, i32* %1, align 4
+  call void @llvm.dbg.declare(metadata i32* %2, metadata !146, metadata !35), !dbg !147
+  call void @llvm.dbg.declare(metadata i32* %3, metadata !148, metadata !35), !dbg !149
+  call void @llvm.dbg.declare(metadata i32* %4, metadata !150, metadata !35), !dbg !151
+  call void @llvm.dbg.declare(metadata i32* %5, metadata !152, metadata !35), !dbg !153
+  store i32 0, i32* %5, align 4, !dbg !153
+  call void @llvm.dbg.declare(metadata i32* %6, metadata !154, metadata !35), !dbg !155
+  store i32 1, i32* %6, align 4, !dbg !155
+  call void @llvm.dbg.declare(metadata [2 x i64]* %7, metadata !156, metadata !35), !dbg !163
+  %8 = getelementptr inbounds [2 x i64], [2 x i64]* %7, i64 0, i64 0, !dbg !164
+  %9 = bitcast i32* %5 to i8*, !dbg !165
+  %10 = call i32 @pthread_create(i64* %8, %union.pthread_attr_t* null, i8* (i8*)* bitcast (void (i8*)* @task1 to i8* (i8*)*), i8* %9) #4, !dbg !166
+  store i32 %10, i32* %3, align 4, !dbg !167
+  %11 = getelementptr inbounds [2 x i64], [2 x i64]* %7, i64 0, i64 1, !dbg !168
+  %12 = bitcast i32* %6 to i8*, !dbg !169
+  %13 = call i32 @pthread_create(i64* %11, %union.pthread_attr_t* null, i8* (i8*)* bitcast (void (i8*)* @task2 to i8* (i8*)*), i8* %12) #4, !dbg !170
+  store i32 %13, i32* %4, align 4, !dbg !171
+  %14 = getelementptr inbounds [2 x i64], [2 x i64]* %7, i64 0, i64 0, !dbg !172
+  %15 = load i64, i64* %14, align 16, !dbg !172
+  %16 = bitcast i32* %2 to i8**, !dbg !173
+  %17 = call i32 @pthread_join(i64 %15, i8** %16), !dbg !174
+  %18 = getelementptr inbounds [2 x i64], [2 x i64]* %7, i64 0, i64 1, !dbg !175
+  %19 = load i64, i64* %18, align 8, !dbg !175
+  %20 = bitcast i32* %2 to i8**, !dbg !176
+  %21 = call i32 @pthread_join(i64 %19, i8** %20), !dbg !177
+  ret i32 0, !dbg !178
+}
+
+; Function Attrs: nounwind
+declare i32 @pthread_create(i64*, %union.pthread_attr_t*, i8* (i8*)*, i8*) #2
+
+declare i32 @pthread_join(i64, i8**) #3
+
+attributes #0 = { noinline nounwind optnone uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable }
+attributes #2 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind }
+
+!llvm.dbg.cu = !{!2}
+!llvm.module.flags = !{!30, !31, !32}
+!llvm.ident = !{!33}
+
+!0 = !DIGlobalVariableExpression(var: !1)
+!1 = distinct !DIGlobalVariable(name: "IntegerGlobalVariable", scope: !2, file: !3, line: 5, type: !7, isLocal: false, isDefinition: true)
+!2 = distinct !DICompileUnit(language: DW_LANG_C99, file: !3, producer: "clang version 5.0.0 (tags/RELEASE_500/final)", isOptimized: false, runtimeVersion: 0, emissionKind: FullDebug, enums: !4, retainedTypes: !5, globals: !9)
+!3 = !DIFile(filename: "testcase8-1.c", directory: "/home/posjkh/ResearchSubjects/QtPlatformAnalysis/QtPlatformStaticAnalysis/02_Calender/Advanced-IPA/TestCases/testcase8")
+!4 = !{}
+!5 = !{!6, !8}
+!6 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !7, size: 64)
+!7 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
+!8 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: null, size: 64)
+!9 = !{!0, !10, !13, !18, !23, !26, !28}
+!10 = !DIGlobalVariableExpression(var: !11)
+!11 = distinct !DIGlobalVariable(name: "DoubleGlobalVariable", scope: !2, file: !3, line: 6, type: !12, isLocal: false, isDefinition: true)
+!12 = !DIBasicType(name: "double", size: 64, encoding: DW_ATE_float)
+!13 = !DIGlobalVariableExpression(var: !14)
+!14 = distinct !DIGlobalVariable(name: "var_t1_func1", scope: !15, file: !3, line: 13, type: !7, isLocal: true, isDefinition: true)
+!15 = distinct !DISubprogram(name: "t1_fnc1", scope: !3, file: !3, line: 11, type: !16, isLocal: false, isDefinition: true, scopeLine: 11, flags: DIFlagPrototyped, isOptimized: false, unit: !2, variables: !4)
+!16 = !DISubroutineType(types: !17)
+!17 = !{null, !6}
+!18 = !DIGlobalVariableExpression(var: !19)
+!19 = distinct !DIGlobalVariable(name: "var_t2_func1", scope: !20, file: !3, line: 21, type: !7, isLocal: true, isDefinition: true)
+!20 = distinct !DISubprogram(name: "t2_fnc1", scope: !3, file: !3, line: 19, type: !21, isLocal: false, isDefinition: true, scopeLine: 19, flags: DIFlagPrototyped, isOptimized: false, unit: !2, variables: !4)
+!21 = !DISubroutineType(types: !22)
+!22 = !{null, !6, !6}
+!23 = !DIGlobalVariableExpression(var: !24)
+!24 = distinct !DIGlobalVariable(name: "charGlobal1", scope: !2, file: !3, line: 4, type: !25, isLocal: false, isDefinition: true)
+!25 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
+!26 = !DIGlobalVariableExpression(var: !27)
+!27 = distinct !DIGlobalVariable(name: "IntegerPointerGV", scope: !2, file: !3, line: 7, type: !6, isLocal: false, isDefinition: true)
+!28 = !DIGlobalVariableExpression(var: !29)
+!29 = distinct !DIGlobalVariable(name: "charGlobal2", scope: !2, file: !3, line: 8, type: !25, isLocal: false, isDefinition: true)
+!30 = !{i32 2, !"Dwarf Version", i32 4}
+!31 = !{i32 2, !"Debug Info Version", i32 3}
+!32 = !{i32 1, !"wchar_size", i32 4}
+!33 = !{!"clang version 5.0.0 (tags/RELEASE_500/final)"}
+!34 = !DILocalVariable(name: "ptr1", arg: 1, scope: !15, file: !3, line: 11, type: !6)
+!35 = !DIExpression()
+!36 = !DILocation(line: 11, column: 19, scope: !15)
+!37 = !DILocation(line: 14, column: 7, scope: !15)
+!38 = !DILocation(line: 14, column: 2, scope: !15)
+!39 = !DILocation(line: 15, column: 15, scope: !15)
+!40 = !DILocation(line: 16, column: 1, scope: !15)
+!41 = !DILocalVariable(name: "ptr1", arg: 1, scope: !20, file: !3, line: 19, type: !6)
+!42 = !DILocation(line: 19, column: 19, scope: !20)
+!43 = !DILocalVariable(name: "ptr2", arg: 2, scope: !20, file: !3, line: 19, type: !6)
+!44 = !DILocation(line: 19, column: 30, scope: !20)
+!45 = !DILocation(line: 23, column: 8, scope: !20)
+!46 = !DILocation(line: 23, column: 3, scope: !20)
+!47 = !DILocation(line: 24, column: 8, scope: !20)
+!48 = !DILocation(line: 24, column: 3, scope: !20)
+!49 = !DILocation(line: 26, column: 15, scope: !20)
+!50 = !DILocation(line: 27, column: 1, scope: !20)
+!51 = distinct !DISubprogram(name: "shared_func2", scope: !3, file: !3, line: 29, type: !52, isLocal: false, isDefinition: true, scopeLine: 29, flags: DIFlagPrototyped, isOptimized: false, unit: !2, variables: !4)
+!52 = !DISubroutineType(types: !53)
+!53 = !{!6, !6, !6}
+!54 = !DILocalVariable(name: "ptr1", arg: 1, scope: !51, file: !3, line: 29, type: !6)
+!55 = !DILocation(line: 29, column: 24, scope: !51)
+!56 = !DILocalVariable(name: "ptr2", arg: 2, scope: !51, file: !3, line: 29, type: !6)
+!57 = !DILocation(line: 29, column: 35, scope: !51)
+!58 = !DILocation(line: 30, column: 22, scope: !51)
+!59 = !DILocation(line: 31, column: 9, scope: !51)
+!60 = !DILocation(line: 31, column: 2, scope: !51)
+!61 = distinct !DISubprogram(name: "shared_func1", scope: !3, file: !3, line: 34, type: !62, isLocal: false, isDefinition: true, scopeLine: 35, isOptimized: false, unit: !2, variables: !4)
+!62 = !DISubroutineType(types: !63)
+!63 = !{!7}
+!64 = !DILocalVariable(name: "a", scope: !61, file: !3, line: 36, type: !7)
+!65 = !DILocation(line: 36, column: 6, scope: !61)
+!66 = !DILocation(line: 38, column: 1, scope: !61)
+!67 = distinct !DISubprogram(name: "task1", scope: !3, file: !3, line: 40, type: !68, isLocal: false, isDefinition: true, scopeLine: 40, flags: DIFlagPrototyped, isOptimized: false, unit: !2, variables: !4)
+!68 = !DISubroutineType(types: !69)
+!69 = !{null, !8}
+!70 = !DILocalVariable(name: "ptr", arg: 1, scope: !67, file: !3, line: 40, type: !8)
+!71 = !DILocation(line: 40, column: 18, scope: !67)
+!72 = !DILocalVariable(name: "ptr1", scope: !67, file: !3, line: 42, type: !6)
+!73 = !DILocation(line: 42, column: 7, scope: !67)
+!74 = !DILocation(line: 42, column: 21, scope: !67)
+!75 = !DILocation(line: 42, column: 14, scope: !67)
+!76 = !DILocalVariable(name: "ptr2", scope: !67, file: !3, line: 43, type: !6)
+!77 = !DILocation(line: 43, column: 7, scope: !67)
+!78 = !DILocation(line: 43, column: 21, scope: !67)
+!79 = !DILocation(line: 43, column: 14, scope: !67)
+!80 = !DILocalVariable(name: "ret", scope: !67, file: !3, line: 44, type: !6)
+!81 = !DILocation(line: 44, column: 7, scope: !67)
+!82 = !DILocation(line: 46, column: 2, scope: !67)
+!83 = !DILocation(line: 48, column: 24, scope: !67)
+!84 = !DILocalVariable(name: "a", scope: !67, file: !3, line: 50, type: !7)
+!85 = !DILocation(line: 50, column: 6, scope: !67)
+!86 = !DILocation(line: 51, column: 5, scope: !87)
+!87 = distinct !DILexicalBlock(scope: !67, file: !3, line: 51, column: 5)
+!88 = !DILocation(line: 51, column: 7, scope: !87)
+!89 = !DILocation(line: 51, column: 5, scope: !67)
+!90 = !DILocation(line: 53, column: 11, scope: !91)
+!91 = distinct !DILexicalBlock(scope: !87, file: !3, line: 51, column: 12)
+!92 = !DILocation(line: 53, column: 3, scope: !91)
+!93 = !DILocation(line: 55, column: 2, scope: !91)
+!94 = !DILocation(line: 58, column: 22, scope: !95)
+!95 = distinct !DILexicalBlock(scope: !87, file: !3, line: 55, column: 7)
+!96 = !DILocation(line: 58, column: 28, scope: !95)
+!97 = !DILocation(line: 58, column: 9, scope: !95)
+!98 = !DILocation(line: 58, column: 7, scope: !95)
+!99 = !DILocation(line: 59, column: 8, scope: !95)
+!100 = !DILocation(line: 59, column: 3, scope: !95)
+!101 = !DILocation(line: 60, column: 8, scope: !95)
+!102 = !DILocation(line: 60, column: 3, scope: !95)
+!103 = !DILocation(line: 62, column: 1, scope: !67)
+!104 = distinct !DISubprogram(name: "task2", scope: !3, file: !3, line: 64, type: !68, isLocal: false, isDefinition: true, scopeLine: 64, flags: DIFlagPrototyped, isOptimized: false, unit: !2, variables: !4)
+!105 = !DILocalVariable(name: "ptr", arg: 1, scope: !104, file: !3, line: 64, type: !8)
+!106 = !DILocation(line: 64, column: 18, scope: !104)
+!107 = !DILocalVariable(name: "ptr1", scope: !104, file: !3, line: 66, type: !6)
+!108 = !DILocation(line: 66, column: 7, scope: !104)
+!109 = !DILocation(line: 66, column: 21, scope: !104)
+!110 = !DILocation(line: 66, column: 14, scope: !104)
+!111 = !DILocalVariable(name: "ptr2", scope: !104, file: !3, line: 67, type: !6)
+!112 = !DILocation(line: 67, column: 7, scope: !104)
+!113 = !DILocation(line: 67, column: 21, scope: !104)
+!114 = !DILocation(line: 67, column: 14, scope: !104)
+!115 = !DILocalVariable(name: "ret", scope: !104, file: !3, line: 68, type: !6)
+!116 = !DILocation(line: 68, column: 7, scope: !104)
+!117 = !DILocation(line: 70, column: 2, scope: !104)
+!118 = !DILocalVariable(name: "a", scope: !104, file: !3, line: 72, type: !7)
+!119 = !DILocation(line: 72, column: 6, scope: !104)
+!120 = !DILocation(line: 73, column: 6, scope: !121)
+!121 = distinct !DILexicalBlock(scope: !104, file: !3, line: 73, column: 6)
+!122 = !DILocation(line: 73, column: 8, scope: !121)
+!123 = !DILocation(line: 73, column: 6, scope: !104)
+!124 = !DILocation(line: 76, column: 9, scope: !125)
+!125 = distinct !DILexicalBlock(scope: !121, file: !3, line: 73, column: 13)
+!126 = !DILocation(line: 76, column: 7, scope: !125)
+!127 = !DILocation(line: 77, column: 8, scope: !125)
+!128 = !DILocation(line: 77, column: 3, scope: !125)
+!129 = !DILocation(line: 78, column: 22, scope: !125)
+!130 = !DILocation(line: 78, column: 28, scope: !125)
+!131 = !DILocation(line: 78, column: 9, scope: !125)
+!132 = !DILocation(line: 78, column: 7, scope: !125)
+!133 = !DILocation(line: 79, column: 11, scope: !125)
+!134 = !DILocation(line: 79, column: 17, scope: !125)
+!135 = !DILocation(line: 79, column: 3, scope: !125)
+!136 = !DILocation(line: 81, column: 2, scope: !125)
+!137 = !DILocation(line: 84, column: 8, scope: !138)
+!138 = distinct !DILexicalBlock(scope: !121, file: !3, line: 81, column: 7)
+!139 = !DILocation(line: 84, column: 3, scope: !138)
+!140 = !DILocation(line: 85, column: 8, scope: !138)
+!141 = !DILocation(line: 85, column: 3, scope: !138)
+!142 = !DILocation(line: 86, column: 8, scope: !138)
+!143 = !DILocation(line: 86, column: 3, scope: !138)
+!144 = !DILocation(line: 89, column: 1, scope: !104)
+!145 = distinct !DISubprogram(name: "main", scope: !3, file: !3, line: 92, type: !62, isLocal: false, isDefinition: true, scopeLine: 92, isOptimized: false, unit: !2, variables: !4)
+!146 = !DILocalVariable(name: "status", scope: !145, file: !3, line: 94, type: !7)
+!147 = !DILocation(line: 94, column: 6, scope: !145)
+!148 = !DILocalVariable(name: "thread_id1", scope: !145, file: !3, line: 95, type: !7)
+!149 = !DILocation(line: 95, column: 6, scope: !145)
+!150 = !DILocalVariable(name: "thread_id2", scope: !145, file: !3, line: 96, type: !7)
+!151 = !DILocation(line: 96, column: 6, scope: !145)
+!152 = !DILocalVariable(name: "a", scope: !145, file: !3, line: 98, type: !7)
+!153 = !DILocation(line: 98, column: 6, scope: !145)
+!154 = !DILocalVariable(name: "b", scope: !145, file: !3, line: 99, type: !7)
+!155 = !DILocation(line: 99, column: 6, scope: !145)
+!156 = !DILocalVariable(name: "thread", scope: !145, file: !3, line: 101, type: !157)
+!157 = !DICompositeType(tag: DW_TAG_array_type, baseType: !158, size: 128, elements: !161)
+!158 = !DIDerivedType(tag: DW_TAG_typedef, name: "pthread_t", file: !159, line: 60, baseType: !160)
+!159 = !DIFile(filename: "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h", directory: "/home/posjkh/ResearchSubjects/QtPlatformAnalysis/QtPlatformStaticAnalysis/02_Calender/Advanced-IPA/TestCases/testcase8")
+!160 = !DIBasicType(name: "long unsigned int", size: 64, encoding: DW_ATE_unsigned)
+!161 = !{!162}
+!162 = !DISubrange(count: 2)
+!163 = !DILocation(line: 101, column: 12, scope: !145)
+!164 = !DILocation(line: 103, column: 31, scope: !145)
+!165 = !DILocation(line: 103, column: 55, scope: !145)
+!166 = !DILocation(line: 103, column: 15, scope: !145)
+!167 = !DILocation(line: 103, column: 13, scope: !145)
+!168 = !DILocation(line: 104, column: 31, scope: !145)
+!169 = !DILocation(line: 104, column: 55, scope: !145)
+!170 = !DILocation(line: 104, column: 15, scope: !145)
+!171 = !DILocation(line: 104, column: 13, scope: !145)
+!172 = !DILocation(line: 106, column: 15, scope: !145)
+!173 = !DILocation(line: 106, column: 26, scope: !145)
+!174 = !DILocation(line: 106, column: 2, scope: !145)
+!175 = !DILocation(line: 107, column: 15, scope: !145)
+!176 = !DILocation(line: 107, column: 26, scope: !145)
+!177 = !DILocation(line: 107, column: 2, scope: !145)
+!178 = !DILocation(line: 110, column: 2, scope: !145)

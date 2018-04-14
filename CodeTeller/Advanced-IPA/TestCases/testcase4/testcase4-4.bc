@@ -1,0 +1,208 @@
+; ModuleID = 'testcase4-4.c'
+source_filename = "testcase4-4.c"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
+
+%struct._IO_FILE = type { i32, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, %struct._IO_marker*, %struct._IO_FILE*, i32, i32, i64, i16, i8, [1 x i8], i8*, i64, i8*, i8*, i8*, i8*, i64, i32, [20 x i8] }
+%struct._IO_marker = type { %struct._IO_marker*, %struct._IO_FILE*, i32 }
+
+@a = global i32 0, align 4, !dbg !0
+@.str = private unnamed_addr constant [8 x i8] c"file.in\00", align 1
+@.str.1 = private unnamed_addr constant [2 x i8] c"r\00", align 1
+
+; Function Attrs: noinline nounwind optnone uwtable
+define void @fnc3(%struct._IO_FILE*) #0 !dbg !11 {
+  %2 = alloca %struct._IO_FILE*, align 8
+  store %struct._IO_FILE* %0, %struct._IO_FILE** %2, align 8
+  call void @llvm.dbg.declare(metadata %struct._IO_FILE** %2, metadata !76, metadata !77), !dbg !78
+  %3 = load %struct._IO_FILE*, %struct._IO_FILE** %2, align 8, !dbg !79
+  %4 = call i32 @fclose(%struct._IO_FILE* %3), !dbg !80
+  ret void, !dbg !81
+}
+
+; Function Attrs: nounwind readnone speculatable
+declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
+
+declare i32 @fclose(%struct._IO_FILE*) #2
+
+; Function Attrs: noinline nounwind optnone uwtable
+define void @fnc2(%struct._IO_FILE*, %struct._IO_FILE*) #0 !dbg !82 {
+  %3 = alloca %struct._IO_FILE*, align 8
+  %4 = alloca %struct._IO_FILE*, align 8
+  store %struct._IO_FILE* %0, %struct._IO_FILE** %3, align 8
+  call void @llvm.dbg.declare(metadata %struct._IO_FILE** %3, metadata !85, metadata !77), !dbg !86
+  store %struct._IO_FILE* %1, %struct._IO_FILE** %4, align 8
+  call void @llvm.dbg.declare(metadata %struct._IO_FILE** %4, metadata !87, metadata !77), !dbg !88
+  %5 = load %struct._IO_FILE*, %struct._IO_FILE** %3, align 8, !dbg !89
+  %6 = call i32 @fclose(%struct._IO_FILE* %5), !dbg !90
+  %7 = load %struct._IO_FILE*, %struct._IO_FILE** %4, align 8, !dbg !91
+  call void @fnc3(%struct._IO_FILE* %7), !dbg !92
+  ret void, !dbg !93
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define void @fnc1(%struct._IO_FILE*, %struct._IO_FILE*) #0 !dbg !94 {
+  %3 = alloca %struct._IO_FILE*, align 8
+  %4 = alloca %struct._IO_FILE*, align 8
+  %5 = alloca i32, align 4
+  store %struct._IO_FILE* %0, %struct._IO_FILE** %3, align 8
+  call void @llvm.dbg.declare(metadata %struct._IO_FILE** %3, metadata !95, metadata !77), !dbg !96
+  store %struct._IO_FILE* %1, %struct._IO_FILE** %4, align 8
+  call void @llvm.dbg.declare(metadata %struct._IO_FILE** %4, metadata !97, metadata !77), !dbg !98
+  call void @llvm.dbg.declare(metadata i32* %5, metadata !99, metadata !77), !dbg !100
+  store i32 1, i32* %5, align 4, !dbg !100
+  %6 = call %struct._IO_FILE* @fopen(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.1, i32 0, i32 0)), !dbg !101
+  store %struct._IO_FILE* %6, %struct._IO_FILE** %4, align 8, !dbg !102
+  %7 = load %struct._IO_FILE*, %struct._IO_FILE** %3, align 8, !dbg !103
+  %8 = load %struct._IO_FILE*, %struct._IO_FILE** %4, align 8, !dbg !104
+  call void @fnc2(%struct._IO_FILE* %7, %struct._IO_FILE* %8), !dbg !105
+  ret void, !dbg !106
+}
+
+declare %struct._IO_FILE* @fopen(i8*, i8*) #2
+
+; Function Attrs: noinline nounwind optnone uwtable
+define i32 @main() #0 !dbg !107 {
+  %1 = alloca i32, align 4
+  %2 = alloca %struct._IO_FILE*, align 8
+  %3 = alloca %struct._IO_FILE*, align 8
+  store i32 0, i32* %1, align 4
+  call void @llvm.dbg.declare(metadata %struct._IO_FILE** %2, metadata !110, metadata !77), !dbg !111
+  %4 = call %struct._IO_FILE* @fopen(i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str, i32 0, i32 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.1, i32 0, i32 0)), !dbg !112
+  store %struct._IO_FILE* %4, %struct._IO_FILE** %2, align 8, !dbg !111
+  call void @llvm.dbg.declare(metadata %struct._IO_FILE** %3, metadata !113, metadata !77), !dbg !114
+  %5 = load %struct._IO_FILE*, %struct._IO_FILE** %2, align 8, !dbg !115
+  %6 = load %struct._IO_FILE*, %struct._IO_FILE** %3, align 8, !dbg !116
+  call void @fnc1(%struct._IO_FILE* %5, %struct._IO_FILE* %6), !dbg !117
+  store i32 0, i32* @a, align 4, !dbg !118
+  ret i32 0, !dbg !119
+}
+
+attributes #0 = { noinline nounwind optnone uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind readnone speculatable }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+
+!llvm.dbg.cu = !{!2}
+!llvm.module.flags = !{!7, !8, !9}
+!llvm.ident = !{!10}
+
+!0 = !DIGlobalVariableExpression(var: !1)
+!1 = distinct !DIGlobalVariable(name: "a", scope: !2, file: !3, line: 6, type: !6, isLocal: false, isDefinition: true)
+!2 = distinct !DICompileUnit(language: DW_LANG_C99, file: !3, producer: "clang version 5.0.0 (tags/RELEASE_500/final)", isOptimized: false, runtimeVersion: 0, emissionKind: FullDebug, enums: !4, globals: !5)
+!3 = !DIFile(filename: "testcase4-4.c", directory: "/home/posjkh/ResearchSubjects/QtPlatformAnalysis/QtPlatformStaticAnalysis/02_Calender/Advanced-IPA/TestCases/testcase4")
+!4 = !{}
+!5 = !{!0}
+!6 = !DIBasicType(name: "int", size: 32, encoding: DW_ATE_signed)
+!7 = !{i32 2, !"Dwarf Version", i32 4}
+!8 = !{i32 2, !"Debug Info Version", i32 3}
+!9 = !{i32 1, !"wchar_size", i32 4}
+!10 = !{!"clang version 5.0.0 (tags/RELEASE_500/final)"}
+!11 = distinct !DISubprogram(name: "fnc3", scope: !3, file: !3, line: 13, type: !12, isLocal: false, isDefinition: true, scopeLine: 13, flags: DIFlagPrototyped, isOptimized: false, unit: !2, variables: !4)
+!12 = !DISubroutineType(types: !13)
+!13 = !{null, !14}
+!14 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !15, size: 64)
+!15 = !DIDerivedType(tag: DW_TAG_typedef, name: "FILE", file: !16, line: 48, baseType: !17)
+!16 = !DIFile(filename: "/usr/include/stdio.h", directory: "/home/posjkh/ResearchSubjects/QtPlatformAnalysis/QtPlatformStaticAnalysis/02_Calender/Advanced-IPA/TestCases/testcase4")
+!17 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "_IO_FILE", file: !18, line: 241, size: 1728, elements: !19)
+!18 = !DIFile(filename: "/usr/include/libio.h", directory: "/home/posjkh/ResearchSubjects/QtPlatformAnalysis/QtPlatformStaticAnalysis/02_Calender/Advanced-IPA/TestCases/testcase4")
+!19 = !{!20, !21, !24, !25, !26, !27, !28, !29, !30, !31, !32, !33, !34, !42, !43, !44, !45, !49, !51, !53, !57, !60, !62, !64, !65, !66, !67, !71, !72}
+!20 = !DIDerivedType(tag: DW_TAG_member, name: "_flags", scope: !17, file: !18, line: 242, baseType: !6, size: 32)
+!21 = !DIDerivedType(tag: DW_TAG_member, name: "_IO_read_ptr", scope: !17, file: !18, line: 247, baseType: !22, size: 64, offset: 64)
+!22 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !23, size: 64)
+!23 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
+!24 = !DIDerivedType(tag: DW_TAG_member, name: "_IO_read_end", scope: !17, file: !18, line: 248, baseType: !22, size: 64, offset: 128)
+!25 = !DIDerivedType(tag: DW_TAG_member, name: "_IO_read_base", scope: !17, file: !18, line: 249, baseType: !22, size: 64, offset: 192)
+!26 = !DIDerivedType(tag: DW_TAG_member, name: "_IO_write_base", scope: !17, file: !18, line: 250, baseType: !22, size: 64, offset: 256)
+!27 = !DIDerivedType(tag: DW_TAG_member, name: "_IO_write_ptr", scope: !17, file: !18, line: 251, baseType: !22, size: 64, offset: 320)
+!28 = !DIDerivedType(tag: DW_TAG_member, name: "_IO_write_end", scope: !17, file: !18, line: 252, baseType: !22, size: 64, offset: 384)
+!29 = !DIDerivedType(tag: DW_TAG_member, name: "_IO_buf_base", scope: !17, file: !18, line: 253, baseType: !22, size: 64, offset: 448)
+!30 = !DIDerivedType(tag: DW_TAG_member, name: "_IO_buf_end", scope: !17, file: !18, line: 254, baseType: !22, size: 64, offset: 512)
+!31 = !DIDerivedType(tag: DW_TAG_member, name: "_IO_save_base", scope: !17, file: !18, line: 256, baseType: !22, size: 64, offset: 576)
+!32 = !DIDerivedType(tag: DW_TAG_member, name: "_IO_backup_base", scope: !17, file: !18, line: 257, baseType: !22, size: 64, offset: 640)
+!33 = !DIDerivedType(tag: DW_TAG_member, name: "_IO_save_end", scope: !17, file: !18, line: 258, baseType: !22, size: 64, offset: 704)
+!34 = !DIDerivedType(tag: DW_TAG_member, name: "_markers", scope: !17, file: !18, line: 260, baseType: !35, size: 64, offset: 768)
+!35 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !36, size: 64)
+!36 = distinct !DICompositeType(tag: DW_TAG_structure_type, name: "_IO_marker", file: !18, line: 156, size: 192, elements: !37)
+!37 = !{!38, !39, !41}
+!38 = !DIDerivedType(tag: DW_TAG_member, name: "_next", scope: !36, file: !18, line: 157, baseType: !35, size: 64)
+!39 = !DIDerivedType(tag: DW_TAG_member, name: "_sbuf", scope: !36, file: !18, line: 158, baseType: !40, size: 64, offset: 64)
+!40 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !17, size: 64)
+!41 = !DIDerivedType(tag: DW_TAG_member, name: "_pos", scope: !36, file: !18, line: 162, baseType: !6, size: 32, offset: 128)
+!42 = !DIDerivedType(tag: DW_TAG_member, name: "_chain", scope: !17, file: !18, line: 262, baseType: !40, size: 64, offset: 832)
+!43 = !DIDerivedType(tag: DW_TAG_member, name: "_fileno", scope: !17, file: !18, line: 264, baseType: !6, size: 32, offset: 896)
+!44 = !DIDerivedType(tag: DW_TAG_member, name: "_flags2", scope: !17, file: !18, line: 268, baseType: !6, size: 32, offset: 928)
+!45 = !DIDerivedType(tag: DW_TAG_member, name: "_old_offset", scope: !17, file: !18, line: 270, baseType: !46, size: 64, offset: 960)
+!46 = !DIDerivedType(tag: DW_TAG_typedef, name: "__off_t", file: !47, line: 131, baseType: !48)
+!47 = !DIFile(filename: "/usr/include/x86_64-linux-gnu/bits/types.h", directory: "/home/posjkh/ResearchSubjects/QtPlatformAnalysis/QtPlatformStaticAnalysis/02_Calender/Advanced-IPA/TestCases/testcase4")
+!48 = !DIBasicType(name: "long int", size: 64, encoding: DW_ATE_signed)
+!49 = !DIDerivedType(tag: DW_TAG_member, name: "_cur_column", scope: !17, file: !18, line: 274, baseType: !50, size: 16, offset: 1024)
+!50 = !DIBasicType(name: "unsigned short", size: 16, encoding: DW_ATE_unsigned)
+!51 = !DIDerivedType(tag: DW_TAG_member, name: "_vtable_offset", scope: !17, file: !18, line: 275, baseType: !52, size: 8, offset: 1040)
+!52 = !DIBasicType(name: "signed char", size: 8, encoding: DW_ATE_signed_char)
+!53 = !DIDerivedType(tag: DW_TAG_member, name: "_shortbuf", scope: !17, file: !18, line: 276, baseType: !54, size: 8, offset: 1048)
+!54 = !DICompositeType(tag: DW_TAG_array_type, baseType: !23, size: 8, elements: !55)
+!55 = !{!56}
+!56 = !DISubrange(count: 1)
+!57 = !DIDerivedType(tag: DW_TAG_member, name: "_lock", scope: !17, file: !18, line: 280, baseType: !58, size: 64, offset: 1088)
+!58 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !59, size: 64)
+!59 = !DIDerivedType(tag: DW_TAG_typedef, name: "_IO_lock_t", file: !18, line: 150, baseType: null)
+!60 = !DIDerivedType(tag: DW_TAG_member, name: "_offset", scope: !17, file: !18, line: 289, baseType: !61, size: 64, offset: 1152)
+!61 = !DIDerivedType(tag: DW_TAG_typedef, name: "__off64_t", file: !47, line: 132, baseType: !48)
+!62 = !DIDerivedType(tag: DW_TAG_member, name: "__pad1", scope: !17, file: !18, line: 297, baseType: !63, size: 64, offset: 1216)
+!63 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: null, size: 64)
+!64 = !DIDerivedType(tag: DW_TAG_member, name: "__pad2", scope: !17, file: !18, line: 298, baseType: !63, size: 64, offset: 1280)
+!65 = !DIDerivedType(tag: DW_TAG_member, name: "__pad3", scope: !17, file: !18, line: 299, baseType: !63, size: 64, offset: 1344)
+!66 = !DIDerivedType(tag: DW_TAG_member, name: "__pad4", scope: !17, file: !18, line: 300, baseType: !63, size: 64, offset: 1408)
+!67 = !DIDerivedType(tag: DW_TAG_member, name: "__pad5", scope: !17, file: !18, line: 302, baseType: !68, size: 64, offset: 1472)
+!68 = !DIDerivedType(tag: DW_TAG_typedef, name: "size_t", file: !69, line: 62, baseType: !70)
+!69 = !DIFile(filename: "/home/posjkh/ResearchSubjects/LLVM/llvm-ubuntu-linux-5.0/lib/clang/5.0.0/include/stddef.h", directory: "/home/posjkh/ResearchSubjects/QtPlatformAnalysis/QtPlatformStaticAnalysis/02_Calender/Advanced-IPA/TestCases/testcase4")
+!70 = !DIBasicType(name: "long unsigned int", size: 64, encoding: DW_ATE_unsigned)
+!71 = !DIDerivedType(tag: DW_TAG_member, name: "_mode", scope: !17, file: !18, line: 303, baseType: !6, size: 32, offset: 1536)
+!72 = !DIDerivedType(tag: DW_TAG_member, name: "_unused2", scope: !17, file: !18, line: 305, baseType: !73, size: 160, offset: 1568)
+!73 = !DICompositeType(tag: DW_TAG_array_type, baseType: !23, size: 160, elements: !74)
+!74 = !{!75}
+!75 = !DISubrange(count: 20)
+!76 = !DILocalVariable(name: "fin2", arg: 1, scope: !11, file: !3, line: 13, type: !14)
+!77 = !DIExpression()
+!78 = !DILocation(line: 13, column: 17, scope: !11)
+!79 = !DILocation(line: 15, column: 9, scope: !11)
+!80 = !DILocation(line: 15, column: 2, scope: !11)
+!81 = !DILocation(line: 17, column: 1, scope: !11)
+!82 = distinct !DISubprogram(name: "fnc2", scope: !3, file: !3, line: 19, type: !83, isLocal: false, isDefinition: true, scopeLine: 19, flags: DIFlagPrototyped, isOptimized: false, unit: !2, variables: !4)
+!83 = !DISubroutineType(types: !84)
+!84 = !{null, !14, !14}
+!85 = !DILocalVariable(name: "fin1", arg: 1, scope: !82, file: !3, line: 19, type: !14)
+!86 = !DILocation(line: 19, column: 17, scope: !82)
+!87 = !DILocalVariable(name: "fin2", arg: 2, scope: !82, file: !3, line: 19, type: !14)
+!88 = !DILocation(line: 19, column: 29, scope: !82)
+!89 = !DILocation(line: 21, column: 9, scope: !82)
+!90 = !DILocation(line: 21, column: 2, scope: !82)
+!91 = !DILocation(line: 22, column: 7, scope: !82)
+!92 = !DILocation(line: 22, column: 2, scope: !82)
+!93 = !DILocation(line: 23, column: 1, scope: !82)
+!94 = distinct !DISubprogram(name: "fnc1", scope: !3, file: !3, line: 25, type: !83, isLocal: false, isDefinition: true, scopeLine: 25, flags: DIFlagPrototyped, isOptimized: false, unit: !2, variables: !4)
+!95 = !DILocalVariable(name: "fin1", arg: 1, scope: !94, file: !3, line: 25, type: !14)
+!96 = !DILocation(line: 25, column: 17, scope: !94)
+!97 = !DILocalVariable(name: "fin2", arg: 2, scope: !94, file: !3, line: 25, type: !14)
+!98 = !DILocation(line: 25, column: 29, scope: !94)
+!99 = !DILocalVariable(name: "a", scope: !94, file: !3, line: 26, type: !6)
+!100 = !DILocation(line: 26, column: 6, scope: !94)
+!101 = !DILocation(line: 27, column: 10, scope: !94)
+!102 = !DILocation(line: 27, column: 8, scope: !94)
+!103 = !DILocation(line: 28, column: 7, scope: !94)
+!104 = !DILocation(line: 28, column: 13, scope: !94)
+!105 = !DILocation(line: 28, column: 2, scope: !94)
+!106 = !DILocation(line: 29, column: 1, scope: !94)
+!107 = distinct !DISubprogram(name: "main", scope: !3, file: !3, line: 31, type: !108, isLocal: false, isDefinition: true, scopeLine: 31, isOptimized: false, unit: !2, variables: !4)
+!108 = !DISubroutineType(types: !109)
+!109 = !{!6}
+!110 = !DILocalVariable(name: "fin1", scope: !107, file: !3, line: 33, type: !14)
+!111 = !DILocation(line: 33, column: 8, scope: !107)
+!112 = !DILocation(line: 33, column: 16, scope: !107)
+!113 = !DILocalVariable(name: "fin2", scope: !107, file: !3, line: 34, type: !14)
+!114 = !DILocation(line: 34, column: 8, scope: !107)
+!115 = !DILocation(line: 36, column: 7, scope: !107)
+!116 = !DILocation(line: 36, column: 13, scope: !107)
+!117 = !DILocation(line: 36, column: 2, scope: !107)
+!118 = !DILocation(line: 39, column: 4, scope: !107)
+!119 = !DILocation(line: 41, column: 2, scope: !107)

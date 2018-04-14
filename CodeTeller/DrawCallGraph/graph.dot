@@ -1,0 +1,210 @@
+digraph {
+
+	label="Call Graph";
+	subgraph cluster_0 {
+		color=lightgrey;
+		label="fnc1";
+		Node0x1219870 [shape=record, label="{
+				[fnc1%0]\l
+				alloca %0x1216230\l
+				alloca %0x1216230\l
+				store %0x1219740, %0x1219938\l
+				br %0x12196d0\l
+			}"];
+		Node0x1219870 -> Node0x12196d0;
+		Node0x12196d0 [shape=record, label="{
+				[fnc1%1]\l
+				br %0x121bb70\l
+			}"];
+		Node0x12196d0 -> Node0x121bb70;
+		Node0x121bb70 [shape=record, label="{
+				[fnc1%2]\l
+				load %0x1219938\l
+				store %0x121aeb8, %0x12199c8\l
+				load %0x12199c8\l
+				ret %0x121b6f8\l
+			}"];
+	}
+	subgraph cluster_1 {
+		color=lightgrey;
+		label="llvm.dbg.declare";
+	}
+	subgraph cluster_2 {
+		color=lightgrey;
+		label="fnc2";
+		Node0x121bd00 [shape=record, label="{
+				[fnc2%0]\l
+				alloca %0x1216230\l
+				alloca %0x1216230\l
+				store %0x121a780, %0x121bda8\l
+				br %0x121b000\l
+			}"];
+		Node0x121bd00 -> Node0x121b000;
+		Node0x121b000 [shape=record, label="{
+				[fnc2%1]\l
+				store %0x121a7a8, %0x121be08\l
+				br %0x121c1a0\l
+			}"];
+		Node0x121b000 -> Node0x121c1a0;
+		Node0x121c1a0 [shape=record, label="{
+				[fnc2%2]\l
+				load %0x121bda8\l
+				ret %0x121c7b8\l
+			}"];
+	}
+	subgraph cluster_3 {
+		color=lightgrey;
+		label="fnc3";
+		Node0x121cd10 [shape=record, label="{
+				[fnc3%0]\l
+				alloca %0x1216230\l
+				alloca %0x1216230\l
+				alloca %0x1216230\l
+				store %0x121cb90, %0x121cdb8\l
+				br %0x121a8b0\l
+			}"];
+		Node0x121cd10 -> Node0x121a8b0;
+		Node0x121a8b0 [shape=record, label="{
+				[fnc3%1]\l
+				store %0x121cbb8, %0x121ce18\l
+				br %0x121c650\l
+			}"];
+		Node0x121a8b0 -> Node0x121c650;
+		Node0x121c650 [shape=record, label="{
+				[fnc3%2]\l
+				br %0x121d240\l
+			}"];
+		Node0x121c650 -> Node0x121d240;
+		Node0x121d240 [shape=record, label="{
+				[fnc3%3]\l
+				store %0x12191b0, %0x121cec8\l
+				load %0x121cdb8\l
+				bitcast %0x121e318\l
+				call %0x121e478, %free\l
+				br %0x121db20\l
+			}"];
+		Node0x121d240 -> Node0x121db20;
+		Node0x121db20 [shape=record, label="{
+				[fnc3%4]\l
+				load %0x121ce18\l
+				bitcast %0x121ee08\l
+				call %0x121f018, %free\l
+				br %0x121ec60\l
+			}"];
+		Node0x121db20 -> Node0x121ec60;
+		Node0x121ec60 [shape=record, label="{
+				[fnc3%5]\l
+				ret \l
+			}"];
+	}
+	subgraph cluster_4 {
+		color=lightgrey;
+		label="free";
+	}
+	subgraph cluster_5 {
+		color=lightgrey;
+		label="main";
+		Node0x121fbf0 [shape=record, label="{
+				[main%0]\l
+				alloca %0x1216230\l
+				alloca %0x1216230\l
+				alloca %0x1216230\l
+				alloca %0x1216230\l
+				alloca %0x1216230\l
+				store %0x12191b0, %0x121eb98\l
+				br %0x121ad50\l
+			}"];
+		Node0x121fbf0 -> Node0x121ad50;
+		Node0x121ad50 [shape=record, label="{
+				[main%1]\l
+				call %0x121fd20, %malloc\l
+				br %0x121be50\l
+			}"];
+		Node0x121ad50 -> Node0x121be50;
+		Node0x121be50 [shape=record, label="{
+				[main%2]\l
+				bitcast %0x1220510\l
+				store %0x12206e8, %0x121fcd8\l
+				br %0x121d6f0\l
+			}"];
+		Node0x121be50 -> Node0x121d6f0;
+		Node0x121d6f0 [shape=record, label="{
+				[main%3]\l
+				call %0x121fd20, %malloc\l
+				br %0x121efb0\l
+			}"];
+		Node0x121d6f0 -> Node0x121efb0;
+		Node0x121efb0 [shape=record, label="{
+				[main%4]\l
+				bitcast %0x12213e0\l
+				store %0x1221628, %0x121fd68\l
+				br %0x121f6f0\l
+			}"];
+		Node0x121efb0 -> Node0x121f6f0;
+		Node0x121f6f0 [shape=record, label="{
+				[main%5]\l
+				call %0x121fd20, %malloc\l
+				br %0x121fa80\l
+			}"];
+		Node0x121f6f0 -> Node0x121fa80;
+		Node0x121fa80 [shape=record, label="{
+				[main%6]\l
+				bitcast %0x1222280\l
+				store %0x1222438, %0x121fdc8\l
+				br %0x12201f0\l
+			}"];
+		Node0x121fa80 -> Node0x12201f0;
+		Node0x12201f0 [shape=record, label="{
+				[main%7]\l
+				load %0x121fcd8\l
+				call %0x1223098, %fnc1\l
+				br %0x1224130\l
+			}"];
+		Node0x12201f0 -> Node0x1224130;
+		Node0x1224130 [shape=record, label="{
+				[main%8]\l
+				store %0x1223230, %0x121fe78\l
+				load %0x121fe78\l
+				bitcast %0x1223588\l
+				call %0x1223708, %free\l
+				br %0x1220560\l
+			}"];
+		Node0x1224130 -> Node0x1220560;
+		Node0x1220560 [shape=record, label="{
+				[main%9]\l
+				load %0x121fd68\l
+				load %0x121fdc8\l
+				call %0x1223f88, %0x1221598, %fnc2\l
+				br %0x1221240\l
+			}"];
+		Node0x1220560 -> Node0x1221240;
+		Node0x1221240 [shape=record, label="{
+				[main%10]\l
+				store %0x1224388, %0x121fe78\l
+				load %0x121fe78\l
+				load %0x121fdc8\l
+				call %0x12246c8, %0x1224848, %fnc3\l
+				br %0x1221430\l
+			}"];
+		Node0x1221240 -> Node0x1221430;
+		Node0x1221430 [shape=record, label="{
+				[main%11]\l
+				load %0x121fcd8\l
+				bitcast %0x1224bf8\l
+				call %0x1224d58, %free\l
+				br %0x12220e0\l
+			}"];
+		Node0x1221430 -> Node0x12220e0;
+		Node0x12220e0 [shape=record, label="{
+				[main%12]\l
+				ret %0x12191b0\l
+			}"];
+	}
+	subgraph cluster_6 {
+		color=lightgrey;
+		label="malloc";
+	}
+	Node0x12201f0 -> Node0x1219870
+	Node0x1220560 -> Node0x121bd00
+	Node0x1221240 -> Node0x121cd10
+}

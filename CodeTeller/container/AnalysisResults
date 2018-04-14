@@ -1,0 +1,13 @@
+./code_analysis testcase.bc --target=Linux --thread=Unithread
+[Argument Info]
+TargetTy: Linux
+ThreadTy: Uni-thread
+
+Path[0] main%0 llvm.dbg.declare%0 main%1 malloc%0 main%2 llvm.dbg.declare%0 main%3 malloc%0 main%4 llvm.dbg.declare%0 main%5 malloc%0 main%6 llvm.dbg.declare%0 main%7 fnc1%0 llvm.dbg.declare%0 fnc1%1 llvm.dbg.declare%0 fnc1%2 main%8 free%0 main%9 fnc2%0 llvm.dbg.declare%0 fnc2%1 llvm.dbg.declare%0 fnc2%2 main%10 fnc3%0 llvm.dbg.declare%0 fnc3%1 llvm.dbg.declare%0 fnc3%2 llvm.dbg.declare%0 fnc3%3 free%0 fnc3%4 free%0 fnc3%5 main%11 free%0 main%12 
+
+[Checker is running on Path [0]..]
+[Path [0]][Checker Error]
+ - Improper free(0x12bad58/-1/main/1/0)
+ - Directory: /home/posjkh/ResearchSubjects/StaticAnalysis/InterProceduralAnalysis/IPAnalysis/IP-04/TestCases/testcase5
+ - Finename: testcase5-6.c
+ - Line: 46

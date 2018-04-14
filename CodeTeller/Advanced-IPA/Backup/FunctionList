@@ -1,0 +1,11 @@
+t1_fnc1
+free
+t2_fnc1
+shared_func2
+shared_func1
+task1
+malloc
+task2
+main
+pthread_create
+pthread_join

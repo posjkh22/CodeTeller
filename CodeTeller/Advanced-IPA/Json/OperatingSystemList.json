@@ -1,0 +1,30 @@
+{
+	"OperatingSystem": 
+	[
+		{	
+			"OSName":"Linux",
+			"ThreadInterface":
+			{
+				"TaskGen": "pthread_create",
+				"TaskEnd": "pthread_join",
+				"sem_init": "pthread_mutex_init",
+				"sem_wait": "pthread_mutex_lock",
+				"sem_post": "pthread_mutex_unlock"
+			}
+		},
+		
+
+		{	
+			"OSName":"FreeRTOS",
+			"ThreadInterface":
+			{
+				"TaskGen": "FREEthread_create",
+				"TaskEnd": "FREEthread_join",
+				"sem_init": "FREE_init",
+				"sem_wait": "FREE_wait",
+				"sem_post": "FREE_post"
+			}
+			
+		}
+	]
+}
